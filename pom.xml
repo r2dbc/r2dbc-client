@@ -24,7 +24,7 @@
 
     <groupId>com.nebhale.r2dbc</groupId>
     <artifactId>r2dbc</artifactId>
-    <version>1.0.0.BUILD-SNAPSHOT</version>
+    <version>1.0.0.M2</version>
     <packaging>pom</packaging>
 
     <name>Reactive Relational Database Connectivity</name>
