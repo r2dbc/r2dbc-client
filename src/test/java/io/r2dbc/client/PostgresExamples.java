@@ -16,6 +16,13 @@
 
 package io.r2dbc.client;
 
+import static io.r2dbc.spi.Mutability.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.postgresql.PostgresqlServerErrorException;
@@ -28,14 +35,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.IntStream;
-
-import static io.r2dbc.spi.Mutability.READ_ONLY;
-
-final class Examples {
+final class PostgresExamples {
 
     @RegisterExtension
     static final PostgresqlServerExtension SERVER = new PostgresqlServerExtension();
@@ -75,7 +75,7 @@ final class Examples {
             .withHandle(handle -> handle
 
                 .createQuery("SELECT value FROM test; SELECT value FROM test")
-                .mapResult(Examples::extractColumns))
+                .mapResult(PostgresExamples::extractColumns))
 
             .as(StepVerifier::create)
             .expectNext(Collections.singletonList(100))
@@ -119,7 +119,7 @@ final class Examples {
                 .add()
                 .executeReturningGeneratedKeys()
                 .flatMap(resultBearing -> resultBearing
-                    .mapResult(Examples::extractIds)))
+                    .mapResult(PostgresExamples::extractIds)))
 
             .as(StepVerifier::create)
             .expectNext(Collections.singletonList(1))
@@ -153,20 +153,20 @@ final class Examples {
             .withHandle(handle -> handle
                 .inTransaction(h1 -> h1
                     .select("SELECT value FROM test")
-                    .<Object>mapResult(Examples::extractColumns)
+                    .<Object>mapResult(PostgresExamples::extractColumns)
 
                     .concatWith(h1.execute("INSERT INTO test VALUES ($1)", 200))
                     .concatWith(h1.select("SELECT value FROM test")
-                        .mapResult(Examples::extractColumns))
+                        .mapResult(PostgresExamples::extractColumns))
 
                     .concatWith(h1.createSavepoint("test_savepoint"))
                     .concatWith(h1.execute("INSERT INTO test VALUES ($1)", 300))
                     .concatWith(h1.select("SELECT value FROM test")
-                        .mapResult(Examples::extractColumns))
+                        .mapResult(PostgresExamples::extractColumns))
 
                     .concatWith(h1.rollbackTransactionToSavepoint("test_savepoint"))
                     .concatWith(h1.select("SELECT value FROM test")
-                        .mapResult(Examples::extractColumns))))
+                        .mapResult(PostgresExamples::extractColumns))))
 
             .as(StepVerifier::create)
             .expectNext(Collections.singletonList(100))
@@ -186,14 +186,14 @@ final class Examples {
             .withHandle(handle -> handle
                 .inTransaction(h1 -> h1
                     .select("SELECT value FROM test")
-                    .<Object>mapResult(Examples::extractColumns)
+                    .<Object>mapResult(PostgresExamples::extractColumns)
 
                     .concatWith(h1.execute("INSERT INTO test VALUES ($1)", 200))
                     .concatWith(h1.select("SELECT value FROM test")
-                        .mapResult(Examples::extractColumns)))
+                        .mapResult(PostgresExamples::extractColumns)))
 
                 .concatWith(handle.select("SELECT value FROM test")
-                    .mapResult(Examples::extractColumns)))
+                    .mapResult(PostgresExamples::extractColumns)))
 
             .as(StepVerifier::create)
             .expectNext(Collections.singletonList(100))
@@ -223,16 +223,16 @@ final class Examples {
             .withHandle(handle -> handle
                 .inTransaction(h1 -> h1
                     .select("SELECT value FROM test")
-                    .<Object>mapResult(Examples::extractColumns)
+                    .<Object>mapResult(PostgresExamples::extractColumns)
 
                     .concatWith(h1.execute("INSERT INTO test VALUES ($1)", 200))
                     .concatWith(h1.select("SELECT value FROM test")
-                        .mapResult(Examples::extractColumns))
+                        .mapResult(PostgresExamples::extractColumns))
 
                     .concatWith(Mono.error(new Exception())))
 
                 .onErrorResume(t -> handle.select("SELECT value FROM test")
-                    .mapResult(Examples::extractColumns)))
+                    .mapResult(PostgresExamples::extractColumns)))
 
             .as(StepVerifier::create)
             .expectNext(Collections.singletonList(100))
