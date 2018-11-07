@@ -40,7 +40,9 @@ public final class R2dbc {
      * @throws NullPointerException if {@code connectionFactory} is {@code null}
      */
     public R2dbc(ConnectionFactory connectionFactory) {
-        this.connectionFactory = Objects.requireNonNull(connectionFactory, "connectionFactory must not be null");
+        Objects.requireNonNull(connectionFactory, "connectionFactory must not be null");
+
+        this.connectionFactory = connectionFactory;
     }
 
     /**

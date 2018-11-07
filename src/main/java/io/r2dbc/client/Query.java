@@ -32,7 +32,9 @@ public final class Query implements ResultBearing {
     private final Statement<?> statement;
 
     Query(Statement<?> statement) {
-        this.statement = Objects.requireNonNull(statement, "statement must not be null");
+        Objects.requireNonNull(statement, "statement must not be null");
+
+        this.statement = statement;
     }
 
     /**

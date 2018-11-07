@@ -31,7 +31,9 @@ public final class Batch implements ResultBearing {
     private final io.r2dbc.spi.Batch<?> batch;
 
     Batch(io.r2dbc.spi.Batch<?> batch) {
-        this.batch = Objects.requireNonNull(batch, "batch must not be null");
+        Objects.requireNonNull(batch, "batch must not be null");
+
+        this.batch = batch;
     }
 
     /**

@@ -30,7 +30,9 @@ public final class Update {
     private final Statement<?> statement;
 
     Update(Statement<?> statement) {
-        this.statement = Objects.requireNonNull(statement, "statement must not be null");
+        Objects.requireNonNull(statement, "statement must not be null");
+
+        this.statement = statement;
     }
 
     /**
