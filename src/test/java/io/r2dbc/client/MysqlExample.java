@@ -25,11 +25,11 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.testcontainers.containers.MSSQLServerContainer;
 import org.testcontainers.containers.MySQLContainer;
 import reactor.util.annotation.Nullable;
 
 import static com.github.jasync.r2dbc.mysql.MysqlConnectionFactoryProvider.MYSQL_DRIVER;
+import static io.r2dbc.spi.ConnectionFactoryOptions.DATABASE;
 import static io.r2dbc.spi.ConnectionFactoryOptions.DRIVER;
 import static io.r2dbc.spi.ConnectionFactoryOptions.HOST;
 import static io.r2dbc.spi.ConnectionFactoryOptions.PASSWORD;
@@ -43,12 +43,13 @@ final class MysqlExample implements Example<String> {
     static final MysqlServerExtension SERVER = new MysqlServerExtension();
 
     private final R2dbc r2dbc = new R2dbc(ConnectionFactories.get(builder()
-        .option(DRIVER, MYSQL_DRIVER)
-        .option(HOST, SERVER.getHost())
-        .option(PORT, SERVER.getPort())
-        .option(PASSWORD, SERVER.getPassword())
-        .option(USER, SERVER.getUsername())
-        .build()));
+            .option(DRIVER, MYSQL_DRIVER)
+            .option(HOST, SERVER.getHost())
+            .option(PORT, SERVER.getPort())
+            .option(PASSWORD, SERVER.getPassword())
+            .option(USER, SERVER.getUsername())
+            .option(DATABASE, SERVER.getDatabase())
+            .build()));
 
 
     @Override
@@ -96,11 +97,11 @@ final class MysqlExample implements Example<String> {
             this.container.start();
 
             this.dataSource = DataSourceBuilder.create()
-                .type(HikariDataSource.class)
-                .url(this.container.getJdbcUrl())
-                .username(this.container.getUsername())
-                .password(this.container.getPassword())
-                .build();
+                    .type(HikariDataSource.class)
+                    .url(this.container.getJdbcUrl())
+                    .username(this.container.getUsername())
+                    .password(this.container.getPassword())
+                    .build();
 
             this.dataSource.setMaximumPoolSize(1);
 
@@ -128,5 +129,8 @@ final class MysqlExample implements Example<String> {
             return this.container.getUsername();
         }
 
+        String getDatabase() {
+            return this.container.getDatabaseName();
+        }
     }
 }
