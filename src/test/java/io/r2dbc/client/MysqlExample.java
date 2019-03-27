@@ -18,6 +18,8 @@ package io.r2dbc.client;
 
 import com.zaxxer.hikari.HikariDataSource;
 import io.r2dbc.spi.ConnectionFactories;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -132,5 +134,10 @@ final class MysqlExample implements Example<String> {
         String getDatabase() {
             return this.container.getDatabaseName();
         }
+    }
+
+    @Test
+    @Ignore("compound statements are not supported by the driver")
+    @Override public void compoundStatement() {
     }
 }
