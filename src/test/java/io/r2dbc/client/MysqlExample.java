@@ -54,7 +54,7 @@ final class MysqlExample implements Example<String> {
 
     @Override
     public String getIdentifier(int index) {
-        return String.format("P%d", index);
+        return String.valueOf(index);
     }
 
     @Override
@@ -70,7 +70,7 @@ final class MysqlExample implements Example<String> {
 
     @Override
     public String getPlaceholder(int index) {
-        return String.format("@P%d", index);
+        return "?";
     }
 
     @Override
