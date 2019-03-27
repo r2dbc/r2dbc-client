@@ -138,6 +138,7 @@ final class MysqlExample implements Example<String> {
 
     @Test
     @Ignore("compound statements are not supported by the driver")
-    @Override public void compoundStatement() {
+    @Override
+    public void compoundStatement() {
     }
 }
