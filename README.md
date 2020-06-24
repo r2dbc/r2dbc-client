@@ -1,4 +1,6 @@
-# Reactive Relational Database Connectivity Client (R2DBC)
+This project is no longer being actively maintained.
+
+# Reactive Relational Database Connectivity Client (Archived)
 This project is an exploration of what a Java API for relational database access with [Reactive Streams][rs] might look like.  It uses [Project Reactor][pr].  It uses [Jdbi][jd] as an inspiration.
 
 [jd]: http://jdbi.org
